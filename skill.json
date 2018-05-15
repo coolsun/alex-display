@@ -5,11 +5,11 @@
         "en-US": {
           "summary": "Sample Short Description",
           "examplePhrases": [
-            "Alexa open hello world",
-            "Alexa tell hello world my name is bill",
-            "Alexa tell hello world I want to play"
+            "Alexa open show neo",
+            "Alexa tell show neo my name is bill",
+            "Alexa tell show neo I want to play"
           ],
-          "name": "trivia",
+          "name": "show neo",
           "description": "Sample Full Description"
         }
       },

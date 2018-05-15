@@ -1,0 +1,414 @@
+import { settings } from 'cluster';
+
+/* eslint-disable  func-names */
+/* eslint-disable  no-console */
+
+const Alexa = require('ask-sdk-core');
+var http = require('http');
+var neo_settings = {};
+
+const LaunchRequestHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+
+    // bsun %%%% 20180430 like init function
+    neo_settings.show_neo_version = '0.1';
+    neo_settings.server_domain = "showneo.com";
+    neo_settings.server_port="80";
+    neo_settings.KILL_NAME = 'Show Neo';
+
+    console.log('version:'+handlerInput.requestEnvelope);
+
+    let speechText = `Welcome to the Alexa show neo kit.  You can use your Alexa echo
+    to control any browser on your your display devices like TV, mobile pads, or phones.`;
+    return new Promise((resolve) => {
+      postNeoHttp(handlerInput.requestEnvelope, (data) => {
+        console.log("LaunchRequestHandler>handle>postNeoHttp");
+        console.log('resolve speak:' + speechText);
+        if (data.status == "linked") {
+          neo_settings.linked = true;
+          speechText += "Your account is linked.  You can tell show neo what to do next.";
+          let repromtText = speechText.valueOf();
+          resolve(handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(repromtText)
+            .withSimpleCard(SKILL_NAME, speechText)
+            .getResponse());
+        }
+        else {
+          neo_settings.linked = false;
+          speechText += "Your account is not linked.  Please link you account first.";
+          let repromtText = speechText.valueOf();
+          resolve(handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(repromtText)
+            .withSimpleCard(SKILL_NAME, speechText)
+            .getResponse());
+        }
+      });
+    });
+  }
+};
+
+const HelloWorldIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
+  },
+  handle(handlerInput) {
+    const speechText = 'Hello';
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(SKILL_NAME, speechText)
+      .getResponse();
+  },
+};
+
+const HelpIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
+  },
+  handle(handlerInput) {
+    const speechText = 'You can link your account or ask show neo to show videos, slides, or play games on any brower.';
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .withSimpleCard(SKILL_NAME, speechText)
+      .getResponse();
+  },
+};
+
+
+const CancelAndStopIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent'
+        || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
+  },
+  handle(handlerInput) {
+    const speechText = 'Goodbye!';
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(SKILL_NAME, speechText)
+      .getResponse();
+  },
+};
+
+const SessionEndedRequestHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
+  },
+  handle(handlerInput) {
+    console.log(`Session ended with reason: ${handlerInput.requestEnvelope.request.reason}`);
+
+    return handlerInput.responseBuilder.getResponse();
+  },
+};
+
+const ErrorHandler = {
+  canHandle() {
+    return true;
+  },
+  handle(handlerInput, error) {
+    console.log(`Error handled: ${error.message}`);
+
+    return handlerInput.responseBuilder
+      .speak('Sorry, I can\'t understand the command. Please say again.')
+      .reprompt('Sorry, I can\'t understand the command. Please say again.')
+      .getResponse();
+  },
+};
+
+const LinkAccountIntentHandler = {
+
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'LinkAccountIntent';
+  },
+  handle(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const responseBuilder = handlerInput.responseBuilder;
+
+    
+    let slots = request.intent.slots;
+    let slotsAccessCode = (slots!=undefined&&slots["access_code"] != undefined&&slots["access_code"].value!= undefined)?slots["access_code"].value:""
+    let speechText = '';
+    if (neo_settings.linked) {
+        speechText = 'Show Neo' + slotsCommand + slotsAction + slotsString + slotsNumber;
+        speechText += 'The account is linked already.  Please unlink the account first.'
+        return responseBuilder
+          .speak(speechText)
+          .reprompt(speechText)
+          .withSimpleCard(SKILL_NAME, speechText)
+          .getResponse();
+    }
+    else {
+
+      
+      return new Promise((resolve) => {
+        postNeoHttp(handlerInput.requestEnvelope, (data) => {
+          console.log("LaunchRequestHandler>handle>postNeoHttp");
+          console.log('resolve speak:' + speechText);
+          if (data.status != "success") {
+            neo_settings.linked = true;
+            speechText += "Your account is linked Successfully.  You can tell show neo commands to show videos, slides, or even play games.";
+            let repromtText = speechText.valueOf();
+            resolve(handlerInput.responseBuilder
+              .speak(speechText)
+              .reprompt(repromtText)
+              .withSimpleCard(SKILL_NAME, speechText)
+              .getResponse());
+          }
+          else {
+            neo_settings.linked = false;
+            speechText += "Show Neo fails to link to your account because  " + data.message + ".  Please try again.";
+            let repromtText = speechText.valueOf();
+            resolve(handlerInput.responseBuilder
+              .speak(speechText)
+              .reprompt(repromtText)
+              .withSimpleCard(SKILL_NAME, speechText)
+              .getResponse());
+          }
+        });
+      });
+
+    }
+  }
+};
+
+const CommandActionIntentHandler = {
+
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'CommandActionIntent';
+  },
+  handle(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const responseBuilder = handlerInput.responseBuilder;
+
+    
+    let slots = request.intent.slots;
+    let speechText = '';
+    let slotsCommand = (slots!=undefined&&slots["command"] != undefined&&slots["command"].value!= undefined)?slots["command"].value:""
+    let slotsAction = (slots!=undefined&&slots["action"] != undefined&&slots["action"].value!= undefined)?slots["ation"].value:""
+    let slotsString = (slots!=undefined&&slots["letter"] != undefined&&slots["letter"].value!= undefined)?slots["letter"].value:""
+    let slotsNumber = (slots!=undefined&&slots["number"] != undefined&&slots["number"].value!= undefined)?slots["number"].value:""
+    
+    if (!neo_settings.linked) {
+        speechText = 'Show Neo' + slotsCommand + slotsAction + slotsString + slotsNumber;
+        speechText += 'Please get the access code from showneo.com and link your account with link command first. '
+        return responseBuilder
+          .speak(speechText)
+          .reprompt(speechText)
+          .withSimpleCard(SKILL_NAME, speechText)
+          .getResponse();
+    }
+    
+    if (slotsCommand == "status") {
+
+      return new Promise((resolve) => {
+        getNeoHttp((data) => {
+          console.log("GetNeoHttp:" + data.clients[0]);
+          let fs = require('fs');
+          let client_js = JSON.parse(fs.readFileSync('./client.json', 'utf8'));
+          let client_id= client_js["v"]=="1"?"2":"1";
+          let client_json = '{"id":"'+data.clients[0]+'","v":"'+client_id+'"}';
+      
+          let speechText = `There are currently ${data.clients.length} clients in neo database. `;
+          for (var i=0;i<data.clients.length;i++){
+            if (i === 0) {
+              //first record
+              speechText = speechText + 'Their ids are: ' + data.clients[i]+ ', '
+            } else if (i === data.people.length-1) {
+              //last record
+              speechText = speechText + 'and ' + data.clients[i] + '.'
+            } else {
+              //middle record(s)
+              speechText = speechText + data.clients[i].name + ', '
+            }
+          }
+          console.log('resolve speak:' + speechText);
+          resolve(handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(speechText)
+            .withSimpleCard(SKILL_NAME, speechText)
+            .getResponse());
+        });
+      });
+    }
+    if (slotsCommand == "play") {
+      const speechText = '';
+      //this.emitWithState('PostNeo');
+      //this.emit(':responseReady');
+      return new Promise((resolve) => {
+        postNeoHttpOld((data) => {
+          console.log("GetNeoHttp");
+          let speechText="post successfully";
+          console.log('resolve speak:' + speechText);
+          resolve(handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(speechText)
+            .withSimpleCard(SKILL_NAME, speechText)
+            .getResponse());
+        });
+      });
+    }
+    if (slotsCommand == "report" && slotsString=="sales") {
+      const speechText = 'Today\'s sales is twenty two thousands';
+      return responseBuilder
+        .speak(speechText)
+        .reprompt(speechText)
+        .withSimpleCard(SKILL_NAME, speechText)
+        .getResponse();
+    }
+    if (slotsCommand == "report" && slotsString =="marketing") {
+      const speechText = 'Today\'s google ads conversion is 5.2 percents';
+      return responseBuilder
+        .speak(speechText)
+        .reprompt(speechText)
+        .withSimpleCard(SKILL_NAME, speechText)
+        .getResponse();
+    }
+    speechText = 'Show Neo' + slotsCommand + slotsAction + slotsString + slotsNumber;
+    return responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .withSimpleCard(SKILL_NAME, speechText)
+      .getResponse();
+  }
+};
+
+
+
+function getNeoHttp(callback) {
+var options = {
+  host: server_domain,
+  port: server_port,
+  path: '/get_clients',
+  method: 'GET'
+};
+
+var req = http.request(options, res => {
+    res.setEncoding('utf8');
+    var returnData = "";
+
+    res.on('data', chunk => {
+        returnData = returnData + chunk;
+    });
+
+    res.on('end', () => {
+      var result = JSON.parse(returnData);
+
+      callback(result);
+
+    });
+
+});
+req.end();
+}
+
+function postNeoHttp(inputData, callback) {
+
+
+  //let postData = '{"action":"change", "id":"2uz21q91n","v":"2"}';
+  let postData = JSON.stringify(inputData);
+
+  console.log("postData:" + postData);
+
+  let options = {
+  host: server_domain,
+    port: server_port,
+    path: '/api',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      "Content-Length": Buffer.byteLength(postData)
+    }
+  };
+
+  let req = http.request(options, res => {
+      res.setEncoding('utf8');
+      var returnData = "";
+
+      res.on('data', chunk => {
+          returnData = returnData + chunk;
+      });
+
+      res.on('end', () => {
+        console.log(returnData);
+        var result = JSON.parse(returnData);
+
+        callback(result);
+
+      });
+
+  });
+  req.write(postData);
+  req.end();
+}
+
+
+function postNeoHttpOld(callback) {
+
+  let fs = require('fs');
+  let client_js = JSON.parse(fs.readFileSync('./client.json', 'utf8'));
+  let postData = '{"action":"change", "id":"2uz21q91n","v":"2"}';
+  //let postData = '{"action":"screen", "id":"wpmvuoiiy", "v":"2"}';
+
+  console.log("postData:" + postData);
+
+  let options = {
+  host: server_domain,
+    port: server_port,
+    path: '/portal',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      "Content-Length": Buffer.byteLength(postData)
+    }
+  };
+
+  let req = http.request(options, res => {
+      res.setEncoding('utf8');
+      var returnData = "";
+
+      res.on('data', chunk => {
+          returnData = returnData + chunk;
+      });
+
+      res.on('end', () => {
+        console.log(returnData);
+        var result = JSON.parse(returnData);
+
+        callback(result);
+
+      });
+
+  });
+  req.write(postData);
+  req.end();
+}
+
+
+
+// Set up skill builder
+const skillBuilder = Alexa.SkillBuilders.custom();
+
+exports.handler = skillBuilder
+  .addRequestHandlers(
+    LaunchRequestHandler,
+    HelloWorldIntentHandler,
+    LinkAccountIntentHandler,
+    CommandActionIntentHandler,
+    HelpIntentHandler,
+    CancelAndStopIntentHandler,
+    SessionEndedRequestHandler
+  )
+  .addErrorHandlers(ErrorHandler)
+  .lambda();

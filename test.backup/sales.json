@@ -1,0 +1,106 @@
+{
+	"version": "1.0",
+	"session": {
+		"new": false,
+		"sessionId": "amzn1.echo-api.session.9b069237-616f-4361-87b8-e5de5bd17118",
+		"application": {
+			"applicationId": "amzn1.ask.skill.74c2e14c-3fdd-4d2c-a8e6-d4376a59fed6"
+		},
+		"attributes": {
+			"STATE": "_SEARCHMODE"
+		},
+		"user": {
+			"userId": "amzn1.ask.account.AH3OPKBEZCLZMKRD6AOIKTLE7XWZFEFGPGQEUV4XONSOGTHMJ6YYCBCXCMA555B5RVRG6ION2HPXYZGWERBCLE46NUFSW6HZRB5MU5UVMQQDDPTZOKFYKIE7JHI2ACLCW5KSUS2LDES7LKYEYVE5W5K2LZ6CHHFPMX3CZKKYP6CRMSFUMCGNU3WRWO7BB5ZPRGMJ5COW5Y55K7Y"
+		}
+	},
+	"context": {
+		"AudioPlayer": {
+			"playerActivity": "IDLE"
+		},
+		"Display": {
+			"token": ""
+		},
+		"System": {
+			"application": {
+				"applicationId": "amzn1.ask.skill.74c2e14c-3fdd-4d2c-a8e6-d4376a59fed6"
+			},
+			"user": {
+				"userId": "amzn1.ask.account.AH3OPKBEZCLZMKRD6AOIKTLE7XWZFEFGPGQEUV4XONSOGTHMJ6YYCBCXCMA555B5RVRG6ION2HPXYZGWERBCLE46NUFSW6HZRB5MU5UVMQQDDPTZOKFYKIE7JHI2ACLCW5KSUS2LDES7LKYEYVE5W5K2LZ6CHHFPMX3CZKKYP6CRMSFUMCGNU3WRWO7BB5ZPRGMJ5COW5Y55K7Y"
+			},
+			"device": {
+				"deviceId": "amzn1.ask.device.AH7KPMIPJ4SQAL3Y6D2ME452OIP54N4Y5CIW2LL2FE5PUAITCYWNEAPZGA3BO3WL6UWU3JJOH743JTF4NTUV4EEGAO2L2I4OG623OFSCMWHAZZ6GQPPQTQTDWNYNFKF3BQNIF567FBD5IRQWWOP52X5VO3OA",
+				"supportedInterfaces": {
+					"AudioPlayer": {},
+					"Display": {
+						"templateVersion": "1.0",
+						"markupVersion": "1.0"
+					}
+				}
+			},
+			"apiEndpoint": "https://api.amazonalexa.com",
+			"apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjc0YzJlMTRjLTNmZGQtNGQyYy1hOGU2LWQ0Mzc2YTU5ZmVkNiIsImV4cCI6MTUyNDg2MjIxOCwiaWF0IjoxNTI0ODU4NjE4LCJuYmYiOjE1MjQ4NTg2MTgsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjpudWxsLCJkZXZpY2VJZCI6ImFtem4xLmFzay5kZXZpY2UuQUg3S1BNSVBKNFNRQUwzWTZEMk1FNDUyT0lQNTRONFk1Q0lXMkxMMkZFNVBVQUlUQ1lXTkVBUFpHQTNCTzNXTDZVV1UzSkpPSDc0M0pURjROVFVWNEVFR0FPMkwySTRPRzYyM09GU0NNV0hBWlo2R1FQUFFUUVREV05ZTkZLRjNCUU5JRjU2N0ZCRDVJUlFXV09QNTJYNVZPM09BIiwidXNlcklkIjoiYW16bjEuYXNrLmFjY291bnQuQUgzT1BLQkVaQ0xaTUtSRDZBT0lLVExFN1hXWkZFRkdQR1FFVVY0WE9OU09HVEhNSjZZWUNCQ1hDTUE1NTVCNVJWUkc2SU9OMkhQWFlaR1dFUkJDTEU0Nk5VRlNXNkhaUkI1TVU1VVZNUVFERFBUWk9LRllLSUU3SkhJMkFDTENXNUtTVVMyTERFUzdMS1lFWVZFNVc1SzJMWjZDSEhGUE1YM0NaS0tZUDZDUk1TRlVNQ0dOVTNXUldPN0JCNVpQUkdNSjVDT1c1WTU1SzdZIn19.TyAOW9N2GumOy3sZW28v2rZ8B55J3BGsDinQt8xEi9JLtMQvjM7Lqwn-9pAk0BjWN97norvjUDpuCwZENW3pKVLwrAhMRj3HrgV7dz-jTmQTly26sBXkHybX4RyB-od-ki7FF1xGgu-qJyl6uFRV-8uzBihQoRXt65I0OcMSg19udm3MS_n0XX-V8Ub4DmjJ7WuOgjHhawfIVAMT90cQw1-luUIz_nRRr9xc70zs3oaig7MhsXHf4V_9yiLmK-hhcpz9edLCx1Cw91lRR_groZl2kq16WtMY6At1LcbOuFttqG5R8pHBn8Tzf_Q-FV6roOPnNEocwGNzGqJ-iZKWKA"
+		}
+	},
+	"request": {
+		"type": "IntentRequest",
+		"requestId": "amzn1.echo-api.request.1e296455-1fdf-428e-828a-2b7733030be3",
+		"timestamp": "2018-04-27T19:50:18Z",
+		"locale": "en-US",
+		"intent": {
+			"name": "ActionIntent",
+			"confirmationStatus": "NONE",
+			"slots": {
+				"number": {
+					"name": "number",
+					"confirmationStatus": "NONE"
+				},
+				"action": {
+					"name": "action",
+					"confirmationStatus": "NONE"
+				},
+				"content": {
+					"name": "content",
+					"confirmationStatus": "NONE"
+				},
+				"command": {
+					"name": "command",
+					"value": "report",
+					"resolutions": {
+						"resolutionsPerAuthority": [
+							{
+								"authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.74c2e14c-3fdd-4d2c-a8e6-d4376a59fed6.command",
+								"status": {
+									"code": "ER_SUCCESS_MATCH"
+								},
+								"values": [
+									{
+										"value": {
+											"name": "report",
+											"id": "e98d2f001da5678b39482efbdf5770dc"
+										}
+									}
+								]
+							}
+						]
+					},
+					"confirmationStatus": "NONE"
+				},
+				"letter": {
+					"name": "letter",
+					"value": "sales",
+					"resolutions": {
+						"resolutionsPerAuthority": [
+							{
+								"authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.74c2e14c-3fdd-4d2c-a8e6-d4376a59fed6.letter",
+								"status": {
+									"code": "ER_SUCCESS_NO_MATCH"
+								}
+							}
+						]
+					},
+					"confirmationStatus": "NONE"
+				}
+			}
+		}
+	}
+}
